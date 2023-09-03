@@ -5,6 +5,7 @@
 	Author: Dani S.
 */
 
+using TinyBytes.Idle.Production.Resources;
 using UnityEngine;
 
 namespace TinyBytes.Idle.Production.Storage
@@ -38,7 +39,7 @@ namespace TinyBytes.Idle.Production.Storage
 
         public bool IsAvailable => State == StorageSlotState.Available;
 
-        public GameObject StoredResource { get; private set; }
+        public TransformableResource StoredResource { get; private set; }
 
         #endregion
 
@@ -71,15 +72,15 @@ namespace TinyBytes.Idle.Production.Storage
             State = StorageSlotState.Available;
         }
 
-        public void Fill(GameObject resource)
+        public void Fill(TransformableResource resource)
         {
             resource.transform.parent = transform;
-            resource.transform.position = Vector3.zero;
+            resource.transform.localPosition = Vector3.zero;
             StoredResource = resource;
             State = StorageSlotState.Full;
         }
 
-        public GameObject Free()
+        public TransformableResource Free()
         {
             StoredResource.transform.parent = null;
             var resource = StoredResource;

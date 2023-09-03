@@ -51,7 +51,8 @@ MonoBehaviour:
   _offsetX: 3
   _offsetY: 5
   _cropResourcePrefab: {fileID: 7660451946076098674, guid: 38f812cddc6685c46bd54cfbe8ddce4a, type: 3}
-  _outResourcePrefab: {fileID: 7181096343679748285}
+  _transformableResourcePrefab: {fileID: 7725183057478642261, guid: a955720c9f44dff4393e42e2482df6f9, type: 3}
+  _storage: {fileID: 8876558325623802379}
 --- !u!1001 &8956368336768543443
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -114,8 +115,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2958425820550717487, guid: 4e9d62518b8147d49bc038aa117ff7e1, type: 3}
   m_PrefabInstance: {fileID: 8956368336768543443}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &7181096343679748285 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2297689715765568110, guid: 4e9d62518b8147d49bc038aa117ff7e1, type: 3}
+--- !u!114 &8876558325623802379 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 532752179097952472, guid: 4e9d62518b8147d49bc038aa117ff7e1, type: 3}
   m_PrefabInstance: {fileID: 8956368336768543443}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3aa962e7f62667f4eb65055d863864e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

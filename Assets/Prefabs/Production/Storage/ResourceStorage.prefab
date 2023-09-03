@@ -47,6 +47,6 @@ MonoBehaviour:
   _rows: 3
   _cols: 3
   _size: 1
-  _offsetX: 1
-  _offsetY: 1
+  _offsetX: 1.1
+  _offsetY: 1.05
   _storageSlotPrefab: {fileID: 6254182623480151576, guid: 62f890be37ca3644caf6209f00881ff3, type: 3}

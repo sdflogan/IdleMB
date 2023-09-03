@@ -181,6 +181,13 @@ namespace TinyBytes.Utils
             return obj;
         }
 
+        static public T Spawn<T>(T prefab, bool enable = true) where T : MonoBehaviour
+        {
+            T obj = Spawn(prefab.gameObject, Vector3.zero, Quaternion.identity, null, enable).GetComponent<T>();
+
+            return obj;
+        }
+
         /// <summary>
         /// Despawn the specified gameobject back into its pool.
         /// </summary>

@@ -5,6 +5,7 @@
 	Author: Dani S.
 */
 
+using TinyBytes.Idle.Production.Resources;
 using UnityEngine;
 
 namespace TinyBytes.Idle.Production.Storage
@@ -90,11 +91,11 @@ namespace TinyBytes.Idle.Production.Storage
 
         private StorageSlot GetAvailableSlot()
         {
-            for (int i=0; i<_rows; i++)
+            for (int i=0; i<_cols; i++)
             {
-                for (int j=0; j<_cols; j++)
+                for (int j=0; j<_rows; j++)
                 {
-                    var slot = _slots[i][j];
+                    var slot = _slots[j][i];
 
                     if (slot.IsAvailable)
                     {
@@ -108,7 +109,20 @@ namespace TinyBytes.Idle.Production.Storage
 
         private StorageSlot GetLastUsedSlot()
         {
-            //for (int i=_rows-1)
+            for (int i=_rows-1; i>=0; i--)
+            {
+                for (int j=_cols-1; j>=0; j++)
+                {
+                    var slot = _slots[i][j];
+
+                    if (!slot.IsAvailable)
+                    {
+                        return slot;
+                    }
+                }
+            }
+
+            return _slots[0][0];
         }
 
         #endregion
@@ -131,7 +145,7 @@ namespace TinyBytes.Idle.Production.Storage
             return false;
         }
 
-        public void Add(GameObject collectedResource)
+        public void Add(TransformableResource collectedResource)
         {
             var availableSlot = GetAvailableSlot();
 
@@ -141,9 +155,11 @@ namespace TinyBytes.Idle.Production.Storage
             }
         }
 
-        public GameObject Pop()
+        public TransformableResource Pop()
         {
+            var lastUsedSlot = GetLastUsedSlot();
 
+            return lastUsedSlot.Free();
         }
 
         #endregion

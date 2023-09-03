@@ -32,7 +32,7 @@ namespace TinyBytes.Idle.Production.Crops
 
 		#region Private properties
 
-		private float _collectionSeconds = 10f;
+		private float _collectionSeconds = 5f;
 		private int _resourceValue = 25;
 		private CropField _cropField;
 		

@@ -6,6 +6,7 @@
 */
 
 using System.Collections.Generic;
+using TinyBytes.Idle.Production.Resources;
 using TinyBytes.Idle.Production.Storage;
 using TinyBytes.Utils;
 using UnityEngine;
@@ -30,7 +31,8 @@ namespace TinyBytes.Idle.Production.Crops
         [SerializeField] private float _offsetY;
 
 		[SerializeField] private CropResource _cropResourcePrefab;
-		[SerializeField] private GameObject _outResourcePrefab;
+		[SerializeField] private TransformableResource _transformableResourcePrefab;
+        [SerializeField] private ResourceStorage _storage;
 
         #endregion
 
@@ -42,7 +44,7 @@ namespace TinyBytes.Idle.Production.Crops
 
         #region Public properties
 
-        public ResourceStorage Storage { get; private set; }
+        public ResourceStorage Storage => _storage;
 
         #endregion
 
@@ -106,7 +108,8 @@ namespace TinyBytes.Idle.Production.Crops
 
         private void OnResourceCollected()
         {
-            Storage.Add(_outResourcePrefab);
+            var resourceInstance = SimplePool.Spawn(_transformableResourcePrefab);
+            Storage.Add(resourceInstance);
         }
 
         #endregion
