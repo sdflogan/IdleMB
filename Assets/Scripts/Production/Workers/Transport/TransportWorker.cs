@@ -68,7 +68,12 @@ namespace TinyBytes.Idle.Production.Workers.Transport
 
         private void Think()
         {
-            switch(State)
+            if (!Application.isPlaying)
+            {
+                return;
+            }
+
+            switch (State)
             {
                 case TransportWorkerStates.Idle:
                     Idle();
@@ -114,6 +119,11 @@ namespace TinyBytes.Idle.Production.Workers.Transport
 
                 while (_agent.remainingDistance > _agent.stoppingDistance)
                 {
+                    if (!Application.isPlaying)
+                    {
+                        return;
+                    }
+
                     await Task.Delay(500);
                 }
 

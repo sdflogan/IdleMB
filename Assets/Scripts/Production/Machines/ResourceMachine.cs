@@ -70,6 +70,7 @@ namespace TinyBytes.Idle.Production.Machines
         private void ResourceProcessed()
         {
             PlayerServices.Instance.Wallet.Earn(Player.Wallet.ResourceType.SC, CalculateEarnedValue(_operatingResource));
+            _operatingResource.Increase();
             _operatingResource.gameObject.SetActive(true);
             _outStorage.Add(_operatingResource);
             _operatingResource = null;
@@ -86,6 +87,11 @@ namespace TinyBytes.Idle.Production.Machines
 
         private void Think()
         {
+            if (!Application.isPlaying)
+            {
+                return;
+            }
+
             switch(State)
             {
                 case ResourceMachineState.Idle:

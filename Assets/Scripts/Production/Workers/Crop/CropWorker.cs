@@ -47,7 +47,12 @@ namespace TinyBytes.Idle.Production.Workers.Crop
 
         private void Think()
         {
-            switch(State)
+            if (!Application.isPlaying)
+            {
+                return;
+            }
+
+            switch (State)
             {
                 case CropWorkerStates.Idle:
                     Idle();
