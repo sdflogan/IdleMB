@@ -76,6 +76,7 @@ namespace TinyBytes.Idle.Production.Storage
         {
             resource.transform.parent = transform;
             resource.transform.localPosition = Vector3.zero;
+            resource.transform.localRotation = transform.localRotation;
             StoredResource = resource;
             State = StorageSlotState.Full;
         }

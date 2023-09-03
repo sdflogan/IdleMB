@@ -111,7 +111,7 @@ namespace TinyBytes.Idle.Production.Storage
         {
             for (int i=_rows-1; i>=0; i--)
             {
-                for (int j=_cols-1; j>=0; j++)
+                for (int j=_cols-1; j>=0; j--)
                 {
                     var slot = _slots[i][j];
 
@@ -136,6 +136,22 @@ namespace TinyBytes.Idle.Production.Storage
                 for (int j=0; j<_cols; j++)
                 {
                     if (_slots[i][j].IsAvailable)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public bool HasUsedSpace()
+        {
+            for (int i = 0; i < _rows; i++)
+            {
+                for (int j = 0; j < _cols; j++)
+                {
+                    if (!_slots[i][j].IsAvailable)
                     {
                         return true;
                     }

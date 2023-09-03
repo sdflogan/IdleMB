@@ -18,7 +18,7 @@ namespace TinyBytes.Idle.Production.Crops
 
 		public Action<float> OnCollectStarted;
 		public Action<float> OnCollecting;
-		public Action OnCollectEnded;
+		public Action<CropResource> OnCollectEnded;
 
 
 		#endregion
@@ -46,6 +46,8 @@ namespace TinyBytes.Idle.Production.Crops
 		public CropResourceState State { get; private set; }
 
 		public bool Free { get; private set; }
+
+		public int ResourceValue => _resourceValue;
 		
 		#endregion
 		
@@ -77,7 +79,7 @@ namespace TinyBytes.Idle.Production.Crops
 		private void ResourceCollected()
         {
 			PlayerServices.Instance.Wallet.Earn(Player.Wallet.ResourceType.SC, _resourceValue);
-			OnCollectEnded?.Invoke();
+			OnCollectEnded?.Invoke(this);
 		}
 
 		private void UpdateState(CropResourceState state)

@@ -5,10 +5,10 @@
 	Author: Dani S.
 */
 
-namespace TinyBytes.Idle.Production.Workers
+namespace TinyBytes.Idle.Production.Machines
 {
-	public enum CropWorkerStates
+	public enum ResourceMachineState
 	{
-		Undefined, Idle, Search, Move, Collect
+		Undefined, Idle, Operating, Finish
 	}
 }

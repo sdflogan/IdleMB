@@ -50,6 +50,13 @@ namespace TinyBytes.Idle.UI.Production.Crops
             gameObject.SetActive(false);
         }
 
+        private void OnDestroy()
+        {
+            _resource.OnCollectStarted -= OnCollectStarted;
+            _resource.OnCollecting -= OnCollecting;
+            _resource.OnCollectEnded -= OnCollectEnded;
+        }
+
         #endregion
 
         #region Private methods
@@ -69,7 +76,7 @@ namespace TinyBytes.Idle.UI.Production.Crops
             _fill.fillAmount = (1 - (remainingSeconds / _collectTotalSeconds));
         }
 
-        private void OnCollectEnded()
+        private void OnCollectEnded(CropResource resource)
         {
             _fill.fillAmount = 1;
             gameObject.SetActive(false);

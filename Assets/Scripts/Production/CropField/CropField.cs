@@ -106,9 +106,10 @@ namespace TinyBytes.Idle.Production.Crops
             }
         }
 
-        private void OnResourceCollected()
+        private void OnResourceCollected(CropResource resource)
         {
             var resourceInstance = SimplePool.Spawn(_transformableResourcePrefab);
+            resourceInstance.Init(resource);
             Storage.Add(resourceInstance);
         }
 

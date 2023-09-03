@@ -6,6 +6,7 @@
 */
 
 using System.Collections.Generic;
+using TinyBytes.Idle.Production.Crops;
 using UnityEngine;
 
 namespace TinyBytes.Idle.Production.Resources
@@ -21,17 +22,19 @@ namespace TinyBytes.Idle.Production.Resources
 		#region Inspector properties
 
 		[SerializeField] private List<GameObject> _models;
-		
+
 		#endregion
-		
+
 		#region Private properties
-		
+
+
 		
 		#endregion
 		
 		#region Public properties
 		
 		public int Level { get; private set; }
+		public int ResourceBaseValue { get; private set; }
 
         #endregion
 
@@ -69,6 +72,16 @@ namespace TinyBytes.Idle.Production.Resources
 				Level++;
 				UpdateCurrentModel();
             }
+        }
+
+		public void Init(CropResource cropResource)
+        {
+			ResourceBaseValue = cropResource.ResourceValue;
+        }
+
+		public long GetCurrentValue()
+        {
+			return ResourceBaseValue * (Level+1);
         }
 
         #endregion

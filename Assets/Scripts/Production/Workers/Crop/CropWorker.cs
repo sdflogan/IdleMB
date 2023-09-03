@@ -11,7 +11,7 @@ using TinyBytes.Idle.Production.Crops;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace TinyBytes.Idle.Production.Workers
+namespace TinyBytes.Idle.Production.Workers.Crop
 {
 	public class CropWorker : MonoBehaviour
 	{
