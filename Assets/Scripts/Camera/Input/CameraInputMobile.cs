@@ -7,7 +7,7 @@
 
 using UnityEngine;
 
-namespace TinyBytes.Idle.GameCamera.Input
+namespace TinyBytes.Idle.GameCamera.PlatformInput
 {
 	public class CameraInputMobile : ICameraInput
 	{
