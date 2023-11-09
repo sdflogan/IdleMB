@@ -23,13 +23,26 @@ namespace TinyBytes.Idle.GameCamera
         [SerializeField] private Camera _camera;
         [SerializeField] private Transform _target;
 
-        [SerializeField] private float _followSmoothSpeed;
+        [Space]
 
         [SerializeField] private bool _testMobileInput = false;
 
-        [SerializeField] private float _baseMoveSpeed = 25f;
-        [SerializeField] private float _zoomSpeed = 5f;
+        [Header("Config")]
+
+        [SerializeField] private float _followSmoothSpeed;
         [SerializeField] private Vector2 _zoomRange;
+
+        [Header("Movement")]
+
+        [SerializeField] private float _baseMoveSpeed = 1f;
+        [SerializeField] private float _pcMoveSpeedMultiplier = 50;
+        [SerializeField] private float _mobileMoveSpeedMultiplier = 0.5f;
+
+        [Header("Zoom")]
+
+        [SerializeField] private float _zoomSpeed = 1f;
+        [SerializeField] private float _pcZoomSpeedMultiplier = 5;
+        [SerializeField] private float _mobileZoomSpeedMultiplier = 0.05f;
 
         #endregion
 
@@ -75,98 +88,48 @@ namespace TinyBytes.Idle.GameCamera
         {
             if (Application.platform == RuntimePlatform.OSXEditor || Application.platform == RuntimePlatform.WindowsEditor)
             {
-                _cameraInput = (_testMobileInput ? new CameraInputMobile() : new CameraInputPC());
+                _cameraInput = (_testMobileInput ? 
+                    new CameraInputMobile(_mobileMoveSpeedMultiplier, _mobileZoomSpeedMultiplier) : 
+                    new CameraInputPC(_pcMoveSpeedMultiplier, _pcZoomSpeedMultiplier));
             }
             else
             {
-                _cameraInput = new CameraInputMobile();
+                _cameraInput = new CameraInputMobile(_mobileMoveSpeedMultiplier, _mobileZoomSpeedMultiplier);
             }
         }
 
         private void TouchHandler()
         {
-            // TODO: Split this logic inside cameraInput Interfaces
-            // I want to understand differences between pc and mobile before I abstract it
-            if (Input.GetMouseButton(0))
+            HandleCameraZoom();
+            HandleCameraMovement();
+        }
+
+        private void HandleCameraMovement()
+        {
+            if (_cameraInput.IsMoving())
             {
-                HandleCameraZoomPC();
-                HandleCameraMovementPC();
+                var axis = _cameraInput.GetAxisXY();
+                var currentZoomSpeedMultiplier = (_camera.orthographicSize / _zoomRange.x);
+                var moveSpeed = _cameraInput.CalculateMoveSpeed(_baseMoveSpeed, currentZoomSpeedMultiplier);
+
+                // Move camera
+                Vector3 moveVector = new Vector3(axis.x, 0, axis.y) * moveSpeed * Time.deltaTime;
+
+                // Camera could rotated, so we need to properly translate those inputs
+                moveVector = Quaternion.Euler(0, _camera.transform.eulerAngles.y, 0) * moveVector;
+
+                // Move target. Camera will follow it
+                _target.Translate(moveVector, Space.World);
             }
         }
 
-        private void HandleCameraMovementPC()
+        private void HandleCameraZoom()
         {
-            var xAxis = -Input.GetAxis("Mouse X");
-            var yAxis = -Input.GetAxis("Mouse Y");
-
-            // We need to consider current zoom. When we make a zoom, camera should move slowly.
-            var adjustedMoveSpeed = _baseMoveSpeed * (_camera.orthographicSize / _zoomRange.x); // Adjust speed based on zoom
-
-            // Move camera
-            Vector3 moveVector = new Vector3(xAxis, 0, yAxis) * adjustedMoveSpeed * Time.deltaTime;
-
-            // Camera could rotated, so we need to properly translate those inputs
-            moveVector = Quaternion.Euler(0, _camera.transform.eulerAngles.y, 0) * moveVector;
-
-            // Move target. Camera will follow it
-            _target.Translate(moveVector, Space.World);
-        }
-
-        private void HandleCameraZoomPC()
-        {
-            var zoom = Input.GetAxis("Mouse ScrollWheel");
-
-            float newSize = Mathf.Clamp(_camera.orthographicSize - zoom * _zoomSpeed, _zoomRange.x, _zoomRange.y);
-
-            _camera.orthographicSize = newSize;
-        }
-
-        private void HandleCameraMovementMobile()
-        {
-            if (Input.touchCount == 1)
+            if (_cameraInput.IsZooming())
             {
-                var touch = Input.GetTouch(0);
-
-                if (touch.phase == TouchPhase.Moved)
-                {
-                    float xAxis = touch.deltaPosition.x; //* 0.01f;
-                    float yAxis = touch.deltaPosition.y; //* 0.01f;
-
-                    // We need to consider current zoom. When we make a zoom, camera should move slowly.
-                    var adjustedMoveSpeed = _baseMoveSpeed * (_camera.orthographicSize / _zoomRange.x); // Adjust speed based on zoom
-
-                    // Move camera
-                    Vector3 moveVector = new Vector3(xAxis, 0, yAxis) * adjustedMoveSpeed * Time.deltaTime;
-
-                    // Camera could rotated, so we need to properly translate those inputs
-                    moveVector = Quaternion.Euler(0, _camera.transform.eulerAngles.y, 0) * moveVector;
-
-                    // Move target. Camera will follow it
-                    _target.Translate(moveVector, Space.World);
-                }
-            }
-        }
-
-        private void HandleCameraZoomMobile()
-        {
-            if (Input.touchCount == 2)
-            {
-                var touch0 = Input.GetTouch(0);
-                var touch1 = Input.GetTouch(1);
-
-                if (touch0.phase == TouchPhase.Moved && touch1.phase == TouchPhase.Moved)
-                {
-                    Vector2 prevTouch0Pos = touch0.position - touch0.deltaPosition;
-                    Vector2 prevTouch1Pos = touch1.position - touch1.deltaPosition;
-
-                    float prevTouchDeltaMag = (prevTouch0Pos - prevTouch1Pos).magnitude;
-                    float touchDeltaMag = (touch0.position - touch1.position).magnitude;
-
-                    float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
-
-                    float newSize = Mathf.Clamp(_camera.orthographicSize + deltaMagnitudeDiff * _zoomSpeed, _zoomRange.x, _zoomRange.y); // *0.01f
-                    _camera.orthographicSize = newSize;
-                }
+                var zoomMagnitude = _cameraInput.CalculateZoomMagnitude();
+                var zoomSize = _cameraInput.CalculateZoom(zoomMagnitude, _zoomSpeed, _camera.orthographicSize, _zoomRange);
+                _camera.orthographicSize = zoomSize;
             }
         }
 

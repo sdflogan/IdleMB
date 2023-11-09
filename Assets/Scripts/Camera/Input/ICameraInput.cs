@@ -11,8 +11,16 @@ namespace TinyBytes.Idle.GameCamera.PlatformInput
 {
 	public interface ICameraInput
 	{
-		Vector2 GetTouchPosition();
+		bool IsMoving();
 
-		float GetZoomVariation();
+		bool IsZooming();
+
+		Vector2 GetAxisXY();
+
+		float CalculateZoomMagnitude();
+
+		float CalculateMoveSpeed(float speedBase, float zoomMultiplier);
+
+		float CalculateZoom(float zoomMagnitude, float speedBase, float currentSize, Vector2 zoomRangeLimit);
 	}
 }

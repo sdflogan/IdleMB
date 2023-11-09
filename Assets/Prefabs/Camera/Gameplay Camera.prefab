@@ -94,11 +94,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _camera: {fileID: 4989913645178172698}
   _target: {fileID: 4989913644747547413}
-  _followSmoothSpeed: 1.5
   _testMobileInput: 0
-  _baseMoveSpeed: 50
-  _zoomSpeed: 5
+  _followSmoothSpeed: 2
   _zoomRange: {x: 5, y: 20}
+  _baseMoveSpeed: 1
+  _pcMoveSpeedMultiplier: 50
+  _mobileMoveSpeedMultiplier: 0.5
+  _zoomSpeed: 1
+  _pcZoomSpeedMultiplier: 5
+  _mobileZoomSpeedMultiplier: 0.005
 --- !u!1 &4989913645178172696
 GameObject:
   m_ObjectHideFlags: 0

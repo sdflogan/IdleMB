@@ -1643,6 +1643,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gameplay Camera
       objectReference: {fileID: 0}
+    - target: {fileID: 4989913644882259331, guid: d9fac874712008740a696b91ba97826d, type: 3}
+      propertyPath: _testMobileInput
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9fac874712008740a696b91ba97826d, type: 3}
 --- !u!1001 &5447213327701608964

@@ -11,50 +11,49 @@ namespace TinyBytes.Idle.GameCamera.PlatformInput
 {
     public class CameraInputPC : ICameraInput
     {
-        #region Events
-
-
-
-        #endregion
-
-        #region Inspector properties
-
-
-
-        #endregion
-
         #region Private properties
 
-
-        #endregion
-
-        #region Public properties
-
-
-
-        #endregion
-
-        #region Private methods
-
-
-
-        #endregion
-
-        #region Public methods
-
+        private float _moveSpeedMultiplier = 50;
+        private float _zoomSpeedMultiplier = 5;
 
         #endregion
 
         #region ICameraInput
 
-        public Vector2 GetTouchPosition()
+        public CameraInputPC(float moveSpeedMultiplier, float zoomSpeedMultiplier)
         {
-            throw new System.NotImplementedException();
+            _moveSpeedMultiplier = moveSpeedMultiplier;
+            _zoomSpeedMultiplier = zoomSpeedMultiplier;
         }
 
-        public float GetZoomVariation()
+        public bool IsMoving()
         {
-            throw new System.NotImplementedException();
+            return Input.GetMouseButton(0);
+        }
+
+        public bool IsZooming()
+        {
+            return true;
+        }
+
+        public Vector2 GetAxisXY()
+        {
+            return new Vector2(-Input.GetAxis("Mouse X"), -Input.GetAxis("Mouse Y"));
+        }
+
+        public float CalculateZoomMagnitude()
+        {
+            return Input.GetAxis("Mouse ScrollWheel");
+        }
+
+        public float CalculateMoveSpeed(float speedBase, float zoomMultiplier)
+        {
+            return speedBase * zoomMultiplier * _moveSpeedMultiplier;
+        }
+
+        public float CalculateZoom(float zoomMagnitude, float speedBase, float currentSize, Vector2 zoomRangeLimit)
+        {
+            return Mathf.Clamp(currentSize - zoomMagnitude * speedBase * _zoomSpeedMultiplier, zoomRangeLimit.x, zoomRangeLimit.y);
         }
 
         #endregion
