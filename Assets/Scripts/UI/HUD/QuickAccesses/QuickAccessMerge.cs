@@ -44,8 +44,6 @@ namespace TinyBytes.Idle.UI
 
 			_buttonAnimator?.Play();
 
-			Debug.LogError("<color=orange>MergeAccess</color> -> move camera to merge area");
-
 			GameplayCameraService.OnInstantMovement?.Invoke(_cameraGoal);
 		}
 
