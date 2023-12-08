@@ -14,7 +14,7 @@ namespace TinyBytes.Idle.GameCamera
 	{
         #region Events
 
-
+        public static System.Action<Vector3> OnInstantMovement;
 
         #endregion
 
@@ -37,6 +37,7 @@ namespace TinyBytes.Idle.GameCamera
         [SerializeField] private float _baseMoveSpeed = 1f;
         [SerializeField] private float _pcMoveSpeedMultiplier = 50;
         [SerializeField] private float _mobileMoveSpeedMultiplier = 0.5f;
+        [SerializeField] private float _followAutomaticSpeed = 4;
 
         [Header("Zoom")]
 
@@ -49,6 +50,8 @@ namespace TinyBytes.Idle.GameCamera
         #region Private properties
 
         private ICameraInput _cameraInput;
+        private bool _automaticMovementEnabled = false;
+        private float _automaticMovementThreshold = 0.1f;
 
         #endregion
 
@@ -62,16 +65,32 @@ namespace TinyBytes.Idle.GameCamera
 
         private void Awake()
         {
+            OnInstantMovement += StartAutomaticMovement;
+
             InitCameraInput();
         }
 
-        private void Update()
+		private void OnDestroy()
+		{
+            OnInstantMovement -= StartAutomaticMovement;
+        }
+
+		private void Update()
         {
+            if (_automaticMovementEnabled) return;
+
             TouchHandler();
         }
 
         private void LateUpdate()
         {
+            if (_automaticMovementEnabled)
+			{
+                FollowAutomaticMovement();
+
+                return;
+			}
+
             FollowTarget();
         }
 
@@ -82,6 +101,18 @@ namespace TinyBytes.Idle.GameCamera
         private void FollowTarget()
         {
             _camera.transform.position = Vector3.Lerp(_camera.transform.position, _target.position, _followSmoothSpeed * Time.deltaTime);
+        }
+
+        private void FollowAutomaticMovement()
+        {
+            _camera.transform.position = Vector3.Lerp(_camera.transform.position, _target.position, _followAutomaticSpeed * Time.deltaTime);
+
+            // Check end movement
+            var distance = (_camera.transform.position - _target.position).magnitude;
+
+            if (distance > _automaticMovementThreshold) return;
+
+            StopAutomaticMovement();
         }
 
         private void InitCameraInput()
@@ -132,6 +163,24 @@ namespace TinyBytes.Idle.GameCamera
                 _camera.orthographicSize = zoomSize;
             }
         }
+
+        private void StartAutomaticMovement(Vector3 position)
+		{
+            position.y = _target.position.y;
+
+            _target.position = position;
+
+            var maxZoomOut = _zoomRange.y;
+
+            _camera.orthographicSize = maxZoomOut;
+
+            _automaticMovementEnabled = true;
+		}
+
+        private void StopAutomaticMovement()
+		{
+            _automaticMovementEnabled = false;
+		}
 
         #endregion
 
