@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TinyBytes.Idle.Player.Wallet;
 using TinyBytes.Utils;
+using TinyBytes.Utils.Extension;
 using UnityEngine;
 
 namespace TinyBytes.Idle.Player
@@ -32,6 +33,14 @@ namespace TinyBytes.Idle.Player
         {
             Wallet = new WalletService();
             Wallet.Start();
+
+            double value = 1;
+
+            for (int i = 0; i < 200; i++)
+            {
+                Debug.LogError(value.ToAlphabet());
+                value *= 10;
+            }
         }
 
         #endregion

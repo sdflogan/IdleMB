@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _resources:
   - type: 1
-    icon: {fileID: 21300000, guid: fb052393ea77bce4188339cb09003626, type: 3}
+    icon: {fileID: 21300000, guid: aea44bfc0548d410ca864c2b6cf707bf, type: 3}
   - type: 2
-    icon: {fileID: 21300000, guid: d41917f8d1883aa4b9ce49ef231da508, type: 3}
+    icon: {fileID: 21300000, guid: 7d9c933f7eab947f588df639b7d9bb06, type: 3}
   - type: 3
-    icon: {fileID: 21300000, guid: 3042b019b052942a1baf7aa49d7ca6bb, type: 3}
+    icon: {fileID: 21300000, guid: bd88db778585d4ff7abda875a21e258b, type: 3}
   _defaultSprite: {fileID: 21300000, guid: 65f0e363b74cf5845ab8c3fbc14f39ac, type: 3}
