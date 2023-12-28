@@ -7,6 +7,7 @@
 
 using TinyBytes.Idle;
 using TinyBytes.Idle.Player.Wallet;
+using TinyBytes.Utils.Extension;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -66,7 +67,7 @@ namespace TinyBytes.Idle.UI.HUD
         {
             if (_resource == resource)
             {
-                _value.text = value.ToString();
+                _value.text = value.ToAlphabet();
             }
         }
 

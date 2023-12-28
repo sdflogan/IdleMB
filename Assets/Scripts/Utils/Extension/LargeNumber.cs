@@ -16,10 +16,12 @@ namespace TinyBytes.Utils.Extension
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public static string ToAlphabet(this double value)
+		public static string ToAlphabet(this long value)
         {
 			// Determine the power of 10 for the given number
 			int power = (int)Math.Log10(Math.Abs(value)) / 3;
+
+			if (power < 0) power = 0;
 
 			// Convert the number to a more readable form
 			double formattedNumber = value / Math.Pow(10, power * 3);
@@ -51,14 +53,15 @@ namespace TinyBytes.Utils.Extension
 			int firstLetter = 0;
 			int secondLetter = 0;
 
-			while (power >= 3)
+			while (power > 0)
             {
-				secondLetter = (int)Math.Min(25, power / 3);
-				power -= 3;
+				secondLetter = (int)Math.Min(25, power);
+				power -= 26;
 
-				if (power >= 3)
+				if (power >= 0)
                 {
-					firstLetter = (firstLetter + 1) % 26;
+					firstLetter++;
+					secondLetter = 0;
                 }
             }
 
