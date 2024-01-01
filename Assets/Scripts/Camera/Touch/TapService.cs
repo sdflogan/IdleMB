@@ -47,7 +47,7 @@ namespace TinyBytes.Idle.GameCamera.Touch
             {
                 _touchInput = new TouchInputMobile();
             }
-        }
+        }//
 
         private void DetectUserTap()
         {
