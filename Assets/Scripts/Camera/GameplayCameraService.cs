@@ -6,11 +6,12 @@
 */
 
 using TinyBytes.Idle.GameCamera.PlatformInput;
+using TinyBytes.Utils;
 using UnityEngine;
 
 namespace TinyBytes.Idle.GameCamera
 {
-	public class GameplayCameraService : MonoBehaviour
+	public class GameplayCameraService : Singleton<GameplayCameraService>
 	{
         #region Events
 
@@ -57,7 +58,8 @@ namespace TinyBytes.Idle.GameCamera
 
         #region Public properties
 
-
+        public Camera GameCamera => _camera;
+        public bool TestMobileInput => _testMobileInput;
 
         #endregion
 
