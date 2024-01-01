@@ -1,6 +1,7 @@
+using TinyBytes.Idle.Interactable;
 using UnityEngine;
 
-namespace TinyBytes.Idle.GameCamera.Touch
+namespace TinyBytes.Idle.GameCamera.Tap
 {
     public class TapService : MonoBehaviour
     {
@@ -14,8 +15,8 @@ namespace TinyBytes.Idle.GameCamera.Touch
 
         #region Private properties
 
-        private float _onTouchStartTime;
-        private Vector2 _touchPosition;
+        private float _touchStartTime;
+        private Vector2 _touchStartPosition;
 
         private ITouchInput _touchInput;
 
@@ -53,14 +54,14 @@ namespace TinyBytes.Idle.GameCamera.Touch
         {
             if (_touchInput.IsStartTouching())
             {
-                _onTouchStartTime = Time.time;
-                _touchPosition = _touchInput.GetTouchPosition();
+                _touchStartTime = Time.time;
+                _touchStartPosition = _touchInput.GetTouchPosition();
             }
             else if (_touchInput.IsEndTouching())
             {
-                var touchDuration = Time.time - _onTouchStartTime;
-                var touchDistance = Vector3.Distance(_touchInput.GetTouchPosition(), _touchPosition);
-                Debug.LogError("First: " + _touchPosition + " - Second: " + _touchInput.GetTouchPosition() + " ---- Distance: " + touchDistance);
+                var touchDuration = Time.time - _touchStartTime;
+                var touchDistance = Vector3.Distance(_touchInput.GetTouchPosition(), _touchStartPosition);
+                
                 if (touchDuration < _tapDurationThreshold || touchDistance < _tapDistanceThreshold)
                 {
                     OnTapDone();
@@ -70,15 +71,15 @@ namespace TinyBytes.Idle.GameCamera.Touch
 
         private void OnTapDone()
         {
-            Debug.LogError("Tap Done");
-
-            Ray ray = GameplayCameraService.Instance.GameCamera.ScreenPointToRay(_touchPosition);
+            Ray ray = GameplayCameraService.Instance.GameCamera.ScreenPointToRay(_touchStartPosition);
 
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, _interactableLayers))
+            if (Physics.Raycast(ray, out hit, 500f, _interactableLayers))
             {
-                Debug.LogError("Interactable layer found");
+                var interactableComponent = hit.collider.gameObject.GetComponent<IInteractable>();
+
+                interactableComponent?.Interact();
             }
         }
 

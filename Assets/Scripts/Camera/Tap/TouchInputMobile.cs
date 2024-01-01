@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-namespace TinyBytes.Idle.GameCamera.Touch
+namespace TinyBytes.Idle.GameCamera.Tap
 {
     public class TouchInputMobile : ITouchInput
     {

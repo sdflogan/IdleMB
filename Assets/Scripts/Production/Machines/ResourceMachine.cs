@@ -43,6 +43,7 @@ namespace TinyBytes.Idle.Production.Machines
         #region Public properties
 
         public ResourceMachineState State { get; private set; }
+        public MachineData Data { get; private set; }
 
         #endregion
 
@@ -64,6 +65,8 @@ namespace TinyBytes.Idle.Production.Machines
 
         private void OnGameLoaded()
         {
+            // Load Saved Data
+            Data = new MachineData();
             Think();
         }
 
@@ -80,7 +83,18 @@ namespace TinyBytes.Idle.Production.Machines
 
         private long CalculateEarnedValue(TransformableResource resource)
         {
-            return (long) (resource.GetCurrentValue() * _resourceValueMultiplierBase);
+            // TODO: WORK ON A BETTER FORMULA HERE
+            var levelMultiplier = Data.EarningLevel * 0.1f;
+
+            return (long) (resource.GetCurrentValue() * _resourceValueMultiplierBase * levelMultiplier);
+        }
+
+        private float CalculateOperatingSeconds()
+        {
+            // TODO: WORK ON A BETTER FORMULA HERE
+            var speedMultiplier = Data.SpeedLevel * 0.01f;
+
+            return Math.Min(1, _operatingSeconds - _operatingSeconds * speedMultiplier);
         }
 
         #region AI
@@ -124,12 +138,12 @@ namespace TinyBytes.Idle.Production.Machines
         {
             if (_inStorage.HasUsedSpace() && _outStorage.HasEmptySpace())
             {
-                OnOperatingStarted?.Invoke(_operatingSeconds);
+                float remainingSeconds = CalculateOperatingSeconds();
+
+                OnOperatingStarted?.Invoke(remainingSeconds);
 
                 _operatingResource = _inStorage.Pop();
                 _operatingResource.gameObject.SetActive(false);
-
-                float remainingSeconds = _operatingSeconds;
 
                 while (remainingSeconds > 0)
                 {

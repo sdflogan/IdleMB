@@ -1200,8 +1200,7 @@ MonoBehaviour:
   _tapDistanceThreshold: 50
   _interactableLayers:
     serializedVersion: 2
-    m_Bits: 0
-  _testMobileInput: 0
+    m_Bits: 64
 --- !u!1 &2058116440
 GameObject:
   m_ObjectHideFlags: 0
